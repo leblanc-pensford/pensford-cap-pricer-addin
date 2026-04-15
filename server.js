@@ -1,10 +1,10 @@
 const express = require("express");
-const { createProxyMiddleware } = require("http-proxy-middleware");
 const path = require("path");
 const fs = require("fs");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const LOANBOSS_BASE = "https://pensfordcalculators.loanboss.com";
 
 // CORS headers for all responses
 app.use((req, res, next) => {
@@ -17,22 +17,48 @@ app.use((req, res, next) => {
   next();
 });
 
-// Proxy /api/cap-pricer/* -> https://pensfordcalculators.loanboss.com/cap-pricer/*
-app.use(
-  "/api/cap-pricer",
-  createProxyMiddleware({
-    target: "https://pensfordcalculators.loanboss.com",
-    changeOrigin: true,
-    pathRewrite: { "^/api/cap-pricer": "/cap-pricer" },
-  })
-);
+// Parse JSON bodies for the proxy
+app.use("/api/cap-pricer", express.json());
+
+// Proxy: /api/cap-pricer/* -> LoanBoss /cap-pricer/*
+app.all("/api/cap-pricer/*", async (req, res) => {
+  const targetPath = req.path.replace(/^\/api\/cap-pricer/, "/cap-pricer");
+  const targetUrl = LOANBOSS_BASE + targetPath;
+
+  const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+  };
+  if (req.headers["x-api-key"]) {
+    headers["X-Api-Key"] = req.headers["x-api-key"];
+  }
+
+  const fetchOpts = {
+    method: req.method,
+    headers: headers,
+  };
+  if (req.method === "POST" && req.body) {
+    fetchOpts.body = JSON.stringify(req.body);
+  }
+
+  try {
+    const upstream = await fetch(targetUrl, fetchOpts);
+    const body = await upstream.text();
+    res.status(upstream.status);
+    res.set("Content-Type", upstream.headers.get("content-type") || "application/json");
+    res.send(body);
+  } catch (err) {
+    console.error("Proxy error:", err.message);
+    res.status(502).json({ error: "Proxy error: " + err.message });
+  }
+});
 
 // Serve static files with .html extension support
 app.use(express.static(path.join(__dirname), {
   extensions: ["html", "htm"]
 }));
 
-// Fallback: if a file wasn't found, try appending .html
+// Fallback: try appending .html
 app.use((req, res, next) => {
   if (req.method === "GET" && !path.extname(req.path)) {
     const htmlPath = path.join(__dirname, req.path + ".html");
