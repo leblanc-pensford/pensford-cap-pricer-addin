@@ -12,8 +12,8 @@
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Pensford Cap Pricer" />
   <Description DefaultValue="Price interest rate caps directly in Excel using the LoanBoss Cap Pricer API. Use =PENSFORD.CAP() as a formula." />
-  <IconUrl DefaultValue="https://YOUR-HOSTING-DOMAIN/assets/icon-32.png" />
-  <HighResolutionIconUrl DefaultValue="https://YOUR-HOSTING-DOMAIN/assets/icon-64.png" />
+  <IconUrl DefaultValue="https://cap-addin.pensford.com/assets/icon-32.png" />
+  <HighResolutionIconUrl DefaultValue="https://cap-addin.pensford.com/assets/icon-64.png" />
   <SupportUrl DefaultValue="https://www.pensford.com" />
 
   <!-- Hosts -->
@@ -29,7 +29,7 @@
   </Requirements>
 
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://YOUR-HOSTING-DOMAIN/src/taskpane/taskpane.html" />
+    <SourceLocation DefaultValue="https://cap-addin.pensford.com/src/taskpane/taskpane.html" />
   </DefaultSettings>
 
   <Permissions>ReadWriteDocument</Permissions>
@@ -112,17 +112,17 @@
       <!-- Resources -->
       <Resources>
         <bt:Images>
-          <bt:Image id="Icon.16" DefaultValue="https://YOUR-HOSTING-DOMAIN/assets/icon-16.png" />
-          <bt:Image id="Icon.32" DefaultValue="https://YOUR-HOSTING-DOMAIN/assets/icon-32.png" />
-          <bt:Image id="Icon.80" DefaultValue="https://YOUR-HOSTING-DOMAIN/assets/icon-80.png" />
+          <bt:Image id="Icon.16" DefaultValue="https://cap-addin.pensford.com/assets/icon-16.png" />
+          <bt:Image id="Icon.32" DefaultValue="https://cap-addin.pensford.com/assets/icon-32.png" />
+          <bt:Image id="Icon.80" DefaultValue="https://cap-addin.pensford.com/assets/icon-80.png" />
         </bt:Images>
 
         <bt:Urls>
-          <bt:Url id="Taskpane.Url" DefaultValue="https://YOUR-HOSTING-DOMAIN/src/taskpane/taskpane.html" />
-          <bt:Url id="Functions.Page.Url" DefaultValue="https://YOUR-HOSTING-DOMAIN/src/functions/functions.html" />
-          <bt:Url id="Functions.Script.Url" DefaultValue="https://YOUR-HOSTING-DOMAIN/src/functions/functions.js" />
-          <bt:Url id="Functions.Metadata.Url" DefaultValue="https://YOUR-HOSTING-DOMAIN/src/functions/functions.json" />
-          <bt:Url id="Commands.Url" DefaultValue="https://YOUR-HOSTING-DOMAIN/src/commands/commands.html" />
+          <bt:Url id="Taskpane.Url" DefaultValue="https://cap-addin.pensford.com/src/taskpane/taskpane.html" />
+          <bt:Url id="Functions.Page.Url" DefaultValue="https://cap-addin.pensford.com/src/functions/functions.html" />
+          <bt:Url id="Functions.Script.Url" DefaultValue="https://cap-addin.pensford.com/src/functions/functions.js" />
+          <bt:Url id="Functions.Metadata.Url" DefaultValue="https://cap-addin.pensford.com/src/functions/functions.json" />
+          <bt:Url id="Commands.Url" DefaultValue="https://cap-addin.pensford.com/src/commands/commands.html" />
         </bt:Urls>
 
         <bt:ShortStrings>
