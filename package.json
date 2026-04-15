@@ -1,0 +1,8 @@
+{
+  "name": "pensford-cap-pricer-addin",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npx serve . --listen tcp://0.0.0.0:$PORT --cors"
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "allowCustomDataForDataTypeAny": true,
+  "allowErrorForDataTypeAny": true,
+  "functions": [
+    {
+      "id": "CAP",
+      "name": "CAP",
+      "description": "Prices an interest rate cap via the LoanBoss Cap Pricer API.",
+      "helpUrl": "https://www.pensford.com",
+      "result": {
+        "type": "any",
+        "dimensionality": "matrix"
+      },
+      "parameters": [
+        {
+          "name": "notional",
+          "description": "Loan notional amount the cap is based on (e.g. 25000000 for $25M).",
+          "type": "number",
+          "dimensionality": "scalar",
+          "optional": false
+        },
+        {
+          "name": "strike",
+          "description": "Strike rate (rate ceiling). Enter as percent (e.g. 4.5 for 4.50%) or decimal (0.045).",
+          "type": "number",
+          "dimensionality": "scalar",
+          "optional": false
+        },
+        {
+          "name": "effective",
+          "description": "Effective (start) date in YYYY-MM-DD format, or a cell with a date. Defaults to today if blank. Example: \"2026-06-01\"",
+          "type": "any",
+          "dimensionality": "scalar",
+          "optional": true
+        },
+        {
+          "name": "termination",
+          "description": "End date (YYYY-MM-DD or cell date) OR term in months as integer (e.g. 36 for 3 years, 24 for 2 years). Required.",
+          "type": "any",
+          "dimensionality": "scalar",
+          "optional": true
+        },
+        {
+          "name": "index",
+          "description": "Rate index the cap hedges against. \"TSFR1M\" (1-Month Term SOFR, default) or \"NYFED\" (NY Fed SOFR). Leave blank for Term SOFR.",
+          "type": "string",
+          "dimensionality": "scalar",
+          "optional": true
+        },
+        {
+          "name": "output",
+          "description": "Pricing field(s) as comma-separated list. Options: bankAdj (bank fees), capCost (total premium), mtm (mark-to-market ex fees), mtmPercent (MTM % of notional), mid (mid-market price), netBenefit (borrower benefit), pv (PV total payouts). Blank = ALL fields.",
+          "type": "string",
+          "dimensionality": "scalar",
+          "optional": true
+        },
+        {
+          "name": "headers",
+          "description": "Include header labels in output. TRUE (default) adds headers, FALSE omits. Leave blank for TRUE.",
+          "type": "boolean",
+          "dimensionality": "scalar",
+          "optional": true
+        },
+        {
+          "name": "direction",
+          "description": "Spill direction for multi-field output. \"H\" (horizontal, default) spills into columns, \"V\" (vertical) spills into rows. Leave blank for \"H\".",
+          "type": "string",
+          "dimensionality": "scalar",
+          "optional": true
+        }
+      ],
+      "options": {
+        "requiresAddress": false,
+        "requiresParameterAddresses": false
+      }
+    }
+  ]
+}
