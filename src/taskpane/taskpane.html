@@ -39,7 +39,6 @@
       max-width: 360px;
     }
 
-    /* Header */
     .header {
       display: flex;
       align-items: center;
@@ -72,7 +71,6 @@
       margin-top: 1px;
     }
 
-    /* Sections */
     .section {
       margin-bottom: 20px;
     }
@@ -85,7 +83,6 @@
       margin-bottom: 8px;
     }
 
-    /* API Key Form */
     .input-group {
       display: flex;
       gap: 6px;
@@ -136,7 +133,6 @@
       font-size: 11px;
     }
 
-    /* Status messages */
     .status {
       padding: 8px 10px;
       border-radius: var(--radius);
@@ -155,7 +151,6 @@
       color: var(--error);
     }
 
-    /* Test connection */
     .test-row {
       display: flex;
       align-items: center;
@@ -166,7 +161,6 @@
       color: var(--text-secondary);
     }
 
-    /* Reference table */
     .ref-table {
       width: 100%;
       border-collapse: collapse;
@@ -196,7 +190,6 @@
       white-space: nowrap;
     }
 
-    /* Examples */
     .example {
       background: var(--code-bg);
       padding: 8px 10px;
@@ -214,7 +207,6 @@
       margin-top: 10px;
     }
 
-    /* Divider */
     hr {
       border: none;
       border-top: 1px solid var(--border);
@@ -225,7 +217,6 @@
 <body>
   <div class="container">
 
-    <!-- Header -->
     <div class="header">
       <div class="header-icon">P</div>
       <div>
@@ -234,7 +225,6 @@
       </div>
     </div>
 
-    <!-- API Key -->
     <div class="section">
       <div class="section-title">API Key</div>
       <div class="input-group">
@@ -251,53 +241,26 @@
 
     <hr />
 
-    <!-- Formula Reference -->
     <div class="section">
       <div class="section-title">Formula</div>
       <div class="example">=PENSFORD.CAP(notional, strike, effective, termination, index, output, headers, direction)</div>
     </div>
 
-    <!-- Parameters -->
     <div class="section">
       <div class="section-title">Parameters</div>
       <table class="ref-table">
         <tr><th>Param</th><th>Description</th></tr>
-        <tr>
-          <td><code>notional</code></td>
-          <td>Loan amount (e.g. <code>25000000</code>)</td>
-        </tr>
-        <tr>
-          <td><code>strike</code></td>
-          <td>Rate ceiling &mdash; <code>4.5</code> for 4.50%</td>
-        </tr>
-        <tr>
-          <td><code>effective</code></td>
-          <td>Start date. Blank = today. e.g. <code>"2026-06-01"</code></td>
-        </tr>
-        <tr>
-          <td><code>termination</code></td>
-          <td>End date or months. e.g. <code>36</code> or <code>"2029-06-01"</code></td>
-        </tr>
-        <tr>
-          <td><code>index</code></td>
-          <td>Rate index. <code>"TSFR1M"</code> (default) or <code>"NYFED"</code></td>
-        </tr>
-        <tr>
-          <td><code>output</code></td>
-          <td>Field(s) to return. Blank = all. See below.</td>
-        </tr>
-        <tr>
-          <td><code>headers</code></td>
-          <td><code>TRUE</code> (default) or <code>FALSE</code></td>
-        </tr>
-        <tr>
-          <td><code>direction</code></td>
-          <td><code>"H"</code> horizontal (default) or <code>"V"</code> vertical</td>
-        </tr>
+        <tr><td><code>notional</code></td><td>Loan amount (e.g. <code>25000000</code>)</td></tr>
+        <tr><td><code>strike</code></td><td>Rate ceiling &mdash; <code>4.5</code> for 4.50%</td></tr>
+        <tr><td><code>effective</code></td><td>Start date. Blank = today. e.g. <code>"2026-06-01"</code></td></tr>
+        <tr><td><code>termination</code></td><td>End date or months. e.g. <code>36</code> or <code>"2029-06-01"</code></td></tr>
+        <tr><td><code>index</code></td><td>Rate index. <code>"TSFR1M"</code> (default) or <code>"NYFED"</code></td></tr>
+        <tr><td><code>output</code></td><td>Field(s) to return. Blank = all. See below.</td></tr>
+        <tr><td><code>headers</code></td><td><code>TRUE</code> (default) or <code>FALSE</code></td></tr>
+        <tr><td><code>direction</code></td><td><code>"H"</code> horizontal (default) or <code>"V"</code> vertical</td></tr>
       </table>
     </div>
 
-    <!-- Output Keys -->
     <div class="section">
       <div class="section-title">Output Keys</div>
       <table class="ref-table">
@@ -314,19 +277,14 @@
 
     <hr />
 
-    <!-- Examples -->
     <div class="section">
       <div class="section-title">Examples</div>
-
       <p class="example-label">Basic &mdash; $25M, 4.50% strike, 3-year:</p>
       <div class="example">=PENSFORD.CAP(25000000, 4.5, , 36)</div>
-
       <p class="example-label">Three fields with headers, horizontal:</p>
       <div class="example">=PENSFORD.CAP(25000000, 4.5, , 36, , "capCost,netBenefit,pv", TRUE, "H")</div>
-
       <p class="example-label">Specific dates, vertical output:</p>
       <div class="example">=PENSFORD.CAP(25000000, 4.5, "2026-06-01", "2029-06-01", , "capCost,bankAdj", TRUE, "V")</div>
-
       <p class="example-label">Cell references:</p>
       <div class="example">=PENSFORD.CAP(A2, B2, C2, D2)</div>
     </div>
@@ -334,10 +292,12 @@
   </div>
 
   <script>
-    const API_URL = "https://pensfordcalculators.loanboss.com/cap-pricer/calculate";
+    // API calls go through the local proxy to avoid CORS blocks
+    const API_BASE = window.location.origin;
+    const CALCULATE_URL = API_BASE + "/api/cap-pricer/calculate";
+    const HEALTH_URL = API_BASE + "/api/cap-pricer/health";
 
     Office.onReady(() => {
-      // Load saved key into input on open
       const savedKey = localStorage.getItem("pensford_cap_api_key");
       if (savedKey) {
         document.getElementById("apiKeyInput").value = savedKey;
@@ -374,13 +334,31 @@
         return;
       }
 
+      // Step 1: Health check (no API key needed for proxy)
+      try {
+        const healthResp = await fetch(HEALTH_URL, {
+          method: "GET",
+          headers: { "Accept": "application/json", "X-Api-Key": apiKey }
+        });
+        if (!healthResp.ok) {
+          resultEl.textContent = "Proxy unreachable (HTTP " + healthResp.status + ")";
+          resultEl.style.color = "#dc2626";
+          return;
+        }
+      } catch (e) {
+        resultEl.textContent = "Proxy unreachable: " + e.message;
+        resultEl.style.color = "#dc2626";
+        return;
+      }
+
+      // Step 2: Test a real pricing call
       const today = new Date();
       const effectiveDate = today.getFullYear() + "-" +
         String(today.getMonth() + 1).padStart(2, "0") + "-" +
         String(today.getDate()).padStart(2, "0");
 
       try {
-        const response = await fetch(API_URL, {
+        const response = await fetch(CALCULATE_URL, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -401,14 +379,14 @@
           const cost = data.capCost.toLocaleString("en-US", {
             style: "currency", currency: "USD", minimumFractionDigits: 2
           });
-          resultEl.textContent = "Connected — test cap: " + cost;
+          resultEl.textContent = "Connected \u2014 test cap: " + cost;
           resultEl.style.color = "#059669";
         } else {
           resultEl.textContent = "HTTP " + response.status;
           resultEl.style.color = "#dc2626";
         }
       } catch (e) {
-        resultEl.textContent = "Network error";
+        resultEl.textContent = "Network error: " + e.message;
         resultEl.style.color = "#dc2626";
       }
     }

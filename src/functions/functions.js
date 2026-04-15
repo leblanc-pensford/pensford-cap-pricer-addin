@@ -4,10 +4,12 @@
  * =============================================================================
  *
  * Registers =PENSFORD.CAP() as a streaming custom function in Excel.
- * Calls the LoanBoss Cap Pricer API and returns pricing data.
+ * Calls the LoanBoss Cap Pricer API via local proxy to avoid CORS issues.
  */
 
-const API_URL = "https://pensfordcalculators.loanboss.com/cap-pricer/calculate";
+// API calls go through the local proxy to avoid CORS blocks
+const API_BASE = window.location.origin;
+const API_URL = API_BASE + "/api/cap-pricer/calculate";
 const DEFAULT_INDEX_UUID = "c6b1a7bb-4681-11e9-82f6-0242ac120002"; // 1-Month Term SOFR
 
 // Friendly index names → UUIDs
@@ -89,7 +91,6 @@ async function cap(notional, strike, effective, termination, index, output, head
   if (!effective || effective === "") {
     effectiveDate = formatDate(new Date());
   } else if (typeof effective === "number") {
-    // Excel serial date number
     effectiveDate = formatDate(excelSerialToDate(effective));
   } else {
     effectiveDate = String(effective);
@@ -110,7 +111,6 @@ async function cap(notional, strike, effective, termination, index, output, head
     if (termination <= 120 && Number.isInteger(termination)) {
       months = termination;
     } else {
-      // Excel serial date
       terminationDate = formatDate(excelSerialToDate(termination));
     }
   } else {
@@ -173,7 +173,7 @@ async function cap(notional, strike, effective, termination, index, output, head
     body.months = months;
   }
 
-  // ── Call the API ──────────────────────────────────────────────────────────
+  // ── Call the API via proxy ─────────────────────────────────────────────────
   let response;
   try {
     response = await fetch(API_URL, {
@@ -221,14 +221,12 @@ async function cap(notional, strike, effective, termination, index, output, head
 
   // ── Build 2D output array ─────────────────────────────────────────────────
   if (dir === "V") {
-    // Vertical: each field is a row
     if (showHeaders) {
       return outputKeys.map((_, i) => [headerLabels[i], values[i]]);
     } else {
       return outputKeys.map((_, i) => [values[i]]);
     }
   } else {
-    // Horizontal: each field is a column
     if (showHeaders) {
       return [headerLabels, values];
     } else {
@@ -248,7 +246,6 @@ function formatDate(d) {
 }
 
 function excelSerialToDate(serial) {
-  // Excel serial date: days since 1900-01-01 (with the 1900 leap year bug)
   const utcDays = Math.floor(serial - 25569);
   const utcValue = utcDays * 86400 * 1000;
   return new Date(utcValue);
@@ -258,7 +255,6 @@ async function getStoredApiKey() {
   try {
     return localStorage.getItem("pensford_cap_api_key") || null;
   } catch (e) {
-    // localStorage may not be available in all contexts
     return null;
   }
 }
